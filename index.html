@@ -39,5 +39,24 @@
 
             // 3. Configurar el estilo "Wireframe"
             noFill();           // Sin relleno
-            stroke(255);        // Líneas Blanc
-        
+            stroke(255);        // Líneas Blancas
+            strokeWeight(1.5);  // Grosor de línea
+
+            // 4. Rotación automática lenta (para que no se vea quieta al inicio)
+            rotateY(frameCount * 0.005);
+            rotateX(frameCount * 0.005);
+
+            // 5. DIBUJAR LA ESTRELLA
+            // Truco: Una esfera con muy poco detalle (4, 2) crea una forma de diamante/estrella
+            // sphere(radio, detalleX, detalleY)
+            sphere(180, 4, 2); 
+        }
+
+        // Si cambias el tamaño de la ventana (o giras el celular), se ajusta el canvas
+        function windowResized() {
+            resizeCanvas(windowWidth, windowHeight);
+        }
+    </script>
+
+</body>
+</html>
