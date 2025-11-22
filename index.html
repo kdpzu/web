@@ -3,87 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Estrella 3D Interactiva</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+    <title>Estrella Wireframe</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
     <style>
-        /* --- ESTILOS CSS --- */
         body {
-            /* Fondo negro absoluto */
-            background-color: #000000;
-            /* Quitamos márgenes para que ocupe toda la pantalla */
+            background-color: #000000; /* Fondo Negro */
             margin: 0;
             padding: 0;
-            /* Ocultamos las barras de desplazamiento */
-            overflow: hidden;
-            /* Centramos el contenido */
+            overflow: hidden; /* Sin barras de desplazamiento */
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh; /* Altura completa de la ventana */
+            height: 100vh;
         }
-        
         canvas {
-            /* Asegura que el canvas no tenga bordes extraños */
             display: block;
-            /* Cambia el cursor para indicar que se puede mover */
-            cursor: grab;
-        }
-        canvas:active {
-            cursor: grabbing;
         }
     </style>
 </head>
 <body>
 
     <script>
-        // Variable para guardar la forma de la estrella
-        let starModel;
-
         function setup() {
-            // Creamos un lienzo 3D que ocupe toda la ventana del navegador
+            // Creamos el lienzo del tamaño de la ventana usando el modo WEBGL (3D)
             createCanvas(windowWidth, windowHeight, WEBGL);
-            
-            // Configuramos el estilo wireframe
-            noFill();       // Sin relleno sólido
-            stroke(255);    // Color de las líneas: BLANCO
-            strokeWeight(1.5); // Grosor de las líneas
-
-            // Creamos la geometría de la estrella
-            // Usamos un truco: una esfera con muy poco detalle parece una estrella/cristal
-            // sphere(radio, detalleX, detalleY)
-            // Prueba cambiando el 6 y el 4 para obtener diferentes formas de "estrella"
-            starModel = new p5.Geometry(detailX = 6, detailY = 4, callback = function() {
-                sphere(200); 
-            });
-            // Optimizamos la forma para que se dibuje rápido
-            starModel.computeFaces().computeNormals();
         }
 
         function draw() {
-            // Pintamos el fondo de negro en cada fotograma
+            // 1. Pintar el fondo de negro en cada cuadro (para borrar el rastro anterior)
             background(0);
 
-            // --- INTERACTIVIDAD ---
-            // orbitControl() permite rotar y hacer zoom con el mouse/táctil.
-            // Es la forma más fácil de dar control total.
-            orbitControl(2, 2, 0.1);
+            // 2. Activar el control con el mouse/dedo
+            // (Toca y arrastra para mover, pellizca para zoom)
+            orbitControl();
 
-            // --- ROTACIÓN AUTOMÁTICA SUAVE ---
-            // Añadimos un giro lento y constante para que no esté estática si no la tocas
-            // 'frameCount' es un contador que aumenta siempre.
-            rotateY(frameCount * 0.003); 
-            rotateX(frameCount * 0.002);
-
-            // --- DIBUJAR LA ESTRELLA ---
-            // Usamos el modelo que creamos en setup
-            model(starModel);
-        }
-
-        // Función para redimensionar si el usuario cambia el tamaño de la ventana
-        function windowResized() {
-            resizeCanvas(windowWidth, windowHeight);
-        }
-    </script>
-
-</body>
-</html>
+            // 3. Configurar el estilo "Wireframe"
+            noFill();           // Sin relleno
+            stroke(255);        // Líneas Blanc
+        
