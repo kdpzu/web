@@ -1,1 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Portafolio Personal</title>
+    <style>
+        /* --- ESTILOS CSS (Diseño) --- */
+        :root {
+            --primary-color: #2563eb; /* Azul moderno */
+            --text-color: #333;
+            --bg-color: #f4f4f9;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        /* Encabezado (Header) */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 4rem 1rem;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Contenedor Principal */
+        .container {
+            max-width: 800px;
+            margin: -30px auto 0; /* Sube un poco sobre el header */
+            padding: 0 20px;
+        }
+
+        /* Tarjetas (Secciones) */
+        .card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        /* Lista de Proyectos */
+        .project-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .project-list li {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .project-list a {
+            text-decoration: none;
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .project-list a:hover {
+            text-decoration: underline;
+        }
+
+        /* Botones de Contacto */
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-right: 10px;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Responsivo para móviles */
+        @media (max-width: 600px) {
+            header { padding: 2rem 1rem; }
+            header h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Hola, soy [Tu Nombre]</h1>
+        <p>Desarrollador Web | Estudiante | Creador</p>
+    </header>
+
+    <div class="container">
+        
+        <section class="card">
+            <h2>Sobre mí</h2>
+            <p>
+                ¡Hola! Bienvenido a mi página personal. Me apasiona la tecnología y aprender cosas nuevas. 
+                Aquí podrás encontrar información sobre mis proyectos y cómo contactarme.
+            </p>
+        </section>
+
+        <section class="card">
+            <h2>Mis Proyectos</h2>
+            <ul class="project-list">
+                <li>
+                    <a href="#">Proyecto 1: Calculadora Web</a>
+                    <p>Una calculadora simple hecha con JavaScript.</p>
+                </li>
+                <li>
+                    <a href="#">Proyecto 2: Blog Personal</a>
+                    <p>Un blog minimalista utilizando HTML y CSS.</p>
+                </li>
+                <li>
+                    <a href="#">Proyecto 3: To-Do List</a>
+                    <p>Aplicación para gestionar tareas diarias.</p>
+                </li>
+            </ul>
+        </section>
+
+        <section class="card">
+            <h2>Contacto</h2>
+            <p>¿Quieres colaborar o charlar? Escríbeme.</p>
+            <br>
+            <a href="mailto:tuemail@ejemplo.com" class="btn">Enviar Email</a>
+            <a href="https://github.com/" class="btn">Mi GitHub</a>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Hecho con HTML y CSS.</p>
+    </footer>
+
+</body>
+</html>
 
