@@ -3,58 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Estrella Wireframe</title>
+    <title>Lluvia de Figuras Transformables</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
     <style>
         body {
-            background-color: #000000; /* Fondo Negro */
+            background-color: #000000;
             margin: 0;
             padding: 0;
-            overflow: hidden; /* Sin barras de desplazamiento */
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            overflow: hidden;
             height: 100vh;
+            /* Evita que al tocar rápido en móviles haga zoom */
+            touch-action: none; 
         }
-        canvas {
-            display: block;
-        }
+        canvas { display: block; }
     </style>
 </head>
 <body>
 
     <script>
+        let shapes = []; // Array para guardar todas las figuras que caen
+        let numShapes = 100; // Cantidad de figuras en pantalla (ajusta si va lento)
+        let transitionSpin = 0; // Variable para el efecto de giro al cambiar
+
         function setup() {
-            // Creamos el lienzo del tamaño de la ventana usando el modo WEBGL (3D)
             createCanvas(windowWidth, windowHeight, WEBGL);
+            
+            // Estilo Wireframe
+            noFill();
+            stroke(255);
+            strokeWeight(1);
+
+            // Inicializamos las figuras
+            for (let i = 0; i < numShapes; i++) {
+                shapes.push(new FallingShape());
+            }
         }
 
         function draw() {
-            // 1. Pintar el fondo de negro en cada cuadro (para borrar el rastro anterior)
-            background(0);
+            background(0); // Fondo negro
 
-            // 2. Activar el control con el mouse/dedo
-            // (Toca y arrastra para mover, pellizca para zoom)
-            orbitControl();
+            // Si hubo un clic, aplica el efecto de giro rápido (transición)
+            if (transitionSpin > 0) {
+                rotateY(transitionSpin);
+                transitionSpin *= 0.9; // El giro se frena suavemente
+                if (transitionSpin < 0.01) transitionSpin = 0;
+            }
 
-            // 3. Configurar el estilo "Wireframe"
-            noFill();           // Sin relleno
-            stroke(255);        // Líneas Blancas
-            strokeWeight(1.5);  // Grosor de línea
-
-            // 4. Rotación automática lenta (para que no se vea quieta al inicio)
-            rotateY(frameCount * 0.005);
-            rotateX(frameCount * 0.005);
-
-            // 5. DIBUJAR LA ESTRELLA
-            // Truco: Una esfera con muy poco detalle (4, 2) crea una forma de diamante/estrella
-            // sphere(radio, detalleX, detalleY)
-            sphere(180, 4, 2); 
+            // Actualiza y dibuja cada figura
+            for (let i = 0; i < shapes.length; i++) {
+                shapes[i].update();
+                shapes[i].display();
+            }
         }
 
-        // Si cambias el tamaño de la ventana (o giras el celular), se ajusta el canvas
+        // --- INTERACCIÓN ---
+        // Cuando se toca la pantalla o se hace clic
+        function mousePressed() {
+            // 1. Iniciar efecto de giro
+            transitionSpin = PI * 2; // Un giro completo rápido
+            
+            // 2. Cambiar todas las figuras a un nuevo tipo
+            for (let i = 0; i < shapes.length; i++) {
+                shapes[i].morph();
+            }
+        }
+
         function windowResized() {
             resizeCanvas(windowWidth, windowHeight);
+        }
+
+        // --- CLASE PARA LAS FIGURAS QUE CAEN ---
+        class FallingShape {
+            constructor() {
+                this.reset();
+                this.y = random(-height, height); // Posición inicial aleatoria
+            }
+
+            reset() {
+                // Reinicia la figura arriba de la pantalla
+                this.x = random(-width/2, width/2);
+                this.y = random(-height * 1.5, -height/2); // Empiezan muy arriba
+                this.z = random(-500, 200); // Profundidad variable
+                this.speed = random(2, 7); // Velocidad de caída
+                this.size = random(20, 60);
+                this.rotationSpeedX = random(-0.05, 0.05);
+                this.rotationSpeedY = random(-0.05, 0.05);
+                this.morph(); // Asigna un tipo de forma inicial
+            }
+
+            morph() {
+                // Elige un número entre 0 y 4 para decidir qué figura ser
+                this.type = floor(random(5));
+            }
+
+            update() {
+                // Mueve la figura hacia abajo
+                this.y += this.speed;
+                // Si sale por abajo, reiníciala arriba
+                if (this.y > height/2 + 100) {
+                    this.reset();
+                }
+            }
+
+            display() {
+                push(); // Guarda el estado actual
+                translate(this.x, this.y, this.z);
+                // Rotación individual de la figura mientras cae
+                rotateX(frameCount * this.rotationSpeedX);
+                rotateY(frameCount * this.rotationSpeedY);
+
+                // Dibuja la figura según su tipo
+                switch (this.type) {
+                    case 0: box(this.size); break; // Cubo
+                    case 1: sphere(this.size/1.5, 8, 8); break; // Esfera (baja resolución)
+                    case 2: cone(this.size/1.5, this.size); break; // Cono
+                    case 3: torus(this.size/2, this.size/6); break; // Dona/Toroide
+                    case 4: cylinder(this.size/2, this.size); break; // Cilindro
+                }
+                pop(); // Restaura el estado
+            }
         }
     </script>
 
