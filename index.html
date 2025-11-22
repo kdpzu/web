@@ -2,168 +2,88 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Portafolio Personal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Estrella 3D Interactiva</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
     <style>
-        /* --- ESTILOS CSS (Diseño) --- */
-        :root {
-            --primary-color: #74070E; /* Azul moderno */
-            --text-color: #333;
-            --bg-color: #F4E3B2;
-            --card-bg: #ffffff;
-        }
-
+        /* --- ESTILOS CSS --- */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
+            /* Fondo negro absoluto */
+            background-color: #000000;
+            /* Quitamos márgenes para que ocupe toda la pantalla */
             margin: 0;
             padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            /* Ocultamos las barras de desplazamiento */
+            overflow: hidden;
+            /* Centramos el contenido */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Altura completa de la ventana */
         }
-
-        /* Encabezado (Header) */
-        header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 4rem 1rem;
-            text-align: center;
+        
+        canvas {
+            /* Asegura que el canvas no tenga bordes extraños */
+            display: block;
+            /* Cambia el cursor para indicar que se puede mover */
+            cursor: grab;
         }
-
-        header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-        }
-
-        header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-
-        /* Contenedor Principal */
-        .container {
-            max-width: 800px;
-            margin: -30px auto 0; /* Sube un poco sobre el header */
-            padding: 0 20px;
-        }
-
-        /* Tarjetas (Secciones) */
-        .card {
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            margin-bottom: 2rem;
-        }
-
-        h2 {
-            color: var(--primary-color);
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-        }
-
-        /* Lista de Proyectos */
-        .project-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .project-list li {
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #eee;
-        }
-
-        .project-list a {
-            text-decoration: none;
-            font-weight: bold;
-            color: var(--primary-color);
-            font-size: 1.1rem;
-        }
-
-        .project-list a:hover {
-            text-decoration: underline;
-        }
-
-        /* Botones de Contacto */
-        .btn {
-            display: inline-block;
-            background-color: var(--primary-color);
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            margin-right: 10px;
-            transition: background 0.3s;
-        }
-
-        .btn:hover {
-            background-color: #1d4ed8;
-        }
-
-        footer {
-            text-align: center;
-            padding: 20px;
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        /* Responsivo para móviles */
-        @media (max-width: 600px) {
-            header { padding: 2rem 1rem; }
-            header h1 { font-size: 2rem; }
+        canvas:active {
+            cursor: grabbing;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Hola, soy [Tu Nombre]</h1>
-        <p>Desarrollador Web | Estudiante | Creador</p>
-    </header>
+    <script>
+        // Variable para guardar la forma de la estrella
+        let starModel;
 
-    <div class="container">
-        
-        <section class="card">
-            <h2>Sobre mí</h2>
-            <p>
-                ¡Hola! Bienvenido a mi página personal. Me apasiona la tecnología y aprender cosas nuevas. 
-                Aquí podrás encontrar información sobre mis proyectos y cómo contactarme.
-            </p>
-        </section>
+        function setup() {
+            // Creamos un lienzo 3D que ocupe toda la ventana del navegador
+            createCanvas(windowWidth, windowHeight, WEBGL);
+            
+            // Configuramos el estilo wireframe
+            noFill();       // Sin relleno sólido
+            stroke(255);    // Color de las líneas: BLANCO
+            strokeWeight(1.5); // Grosor de las líneas
 
-        <section class="card">
-            <h2>Mis Proyectos</h2>
-            <ul class="project-list">
-                <li>
-                    <a href="#">Proyecto 1: Calculadora Web</a>
-                    <p>Una calculadora simple hecha con JavaScript.</p>
-                </li>
-                <li>
-                    <a href="#">Proyecto 2: Blog Personal</a>
-                    <p>Un blog minimalista utilizando HTML y CSS.</p>
-                </li>
-                <li>
-                    <a href="#">Proyecto 3: To-Do List</a>
-                    <p>Aplicación para gestionar tareas diarias.</p>
-                </li>
-            </ul>
-        </section>
+            // Creamos la geometría de la estrella
+            // Usamos un truco: una esfera con muy poco detalle parece una estrella/cristal
+            // sphere(radio, detalleX, detalleY)
+            // Prueba cambiando el 6 y el 4 para obtener diferentes formas de "estrella"
+            starModel = new p5.Geometry(detailX = 6, detailY = 4, callback = function() {
+                sphere(200); 
+            });
+            // Optimizamos la forma para que se dibuje rápido
+            starModel.computeFaces().computeNormals();
+        }
 
-        <section class="card">
-            <h2>Contacto</h2>
-            <p>¿Quieres colaborar o charlar? Escríbeme.</p>
-            <br>
-            <a href="mailto:tuemail@ejemplo.com" class="btn">Enviar Email</a>
-            <a href="https://github.com/" class="btn">Mi GitHub</a>
-        </section>
+        function draw() {
+            // Pintamos el fondo de negro en cada fotograma
+            background(0);
 
-    </div>
+            // --- INTERACTIVIDAD ---
+            // orbitControl() permite rotar y hacer zoom con el mouse/táctil.
+            // Es la forma más fácil de dar control total.
+            orbitControl(2, 2, 0.1);
 
-    <footer>
-        <p>&copy; 2024 Hecho con HTML y CSS.</p>
-    </footer>
+            // --- ROTACIÓN AUTOMÁTICA SUAVE ---
+            // Añadimos un giro lento y constante para que no esté estática si no la tocas
+            // 'frameCount' es un contador que aumenta siempre.
+            rotateY(frameCount * 0.003); 
+            rotateX(frameCount * 0.002);
+
+            // --- DIBUJAR LA ESTRELLA ---
+            // Usamos el modelo que creamos en setup
+            model(starModel);
+        }
+
+        // Función para redimensionar si el usuario cambia el tamaño de la ventana
+        function windowResized() {
+            resizeCanvas(windowWidth, windowHeight);
+        }
+    </script>
 
 </body>
 </html>
-
